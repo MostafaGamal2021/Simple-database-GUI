@@ -47,6 +47,7 @@ def submit():
     age.delete(0, END)
 
 def show():
+    global my_label
     conn = sqlite3.connect('address_book.db')
     c = conn.cursor()
 
@@ -59,10 +60,14 @@ def show():
         all_records += str(record) + "\n"
         #all_records += str(record[6]) + " - " + str(record[0]) + " " + str(record[1]) + "\n"
     my_label = Label(root, text = all_records)
-    my_label.grid(row = 8, column = 0, columnspan = 2)
+    my_label.grid(row = 9, column = 0, columnspan = 2)
 
     conn.commit()
     conn.close()
+
+def clear():
+    global my_label
+    my_label.grid_forget()
 
 f_name = Entry(root, width=30)
 f_name.grid(row=0, column=1, padx=20, pady=5)
@@ -85,9 +90,11 @@ state_label = Label(root, text="State").grid(row=4, column=0, padx=10, pady=5)
 age_label = Label(root, text="Age").grid(row=5, column=0, padx=10, pady=5)
 
 submit_btn = Button(root, text="Add Record", command=submit)
-submit_btn.grid(row=6, column=0, columnspan=2, padx=10, pady=10, ipadx=100)
+submit_btn.grid(row=6, column=0, columnspan=2, padx=10, pady=5, ipadx=100)
 query_butn = Button(root, text = "Show Records", command = show)
-query_butn.grid(row=7, column=0, columnspan=2, padx=10, pady=10, ipadx=95)
+query_butn.grid(row=7, column=0, columnspan=2, padx=10, pady=5, ipadx=95)
+clear_butn = Button(root, text = "Clear", command = clear)
+clear_butn.grid(row = 8, column = 0, columnspan = 2,padx=10, pady=5, ipadx=120)
 
 conn.commit()
 conn.close()
