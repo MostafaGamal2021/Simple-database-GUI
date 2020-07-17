@@ -3,7 +3,7 @@ import sqlite3
 
 root = Tk()
 root.title('MGA')
-root.geometry('300x550')
+root.geometry('300x500')
 root.iconbitmap('D:\Python\Level 2\Codemy\Python And TKinter\PYTkinter\Images/moon.ico')
 
 conn = sqlite3.connect('address_book.db')
@@ -18,15 +18,56 @@ c.execute("""CREATE TABLE addresses(
                     state text,
                     age integer)""")
 '''
+def save():
+    global root2
+    global f_name2
+    global l_name2
+    global address2
+    global city2
+    global state2
+    global age2
+    global record_id
+
+    conn = sqlite3.connect('address_book.db')
+    c = conn.cursor()
+
+    c.execute("""UPDATE addresses SET
+            first_name = :first,
+            last_name = :last,
+            address = :address,
+            city = :city,
+            state = :state,
+            age = :age
+            WHERE oid = :oid""",
+              {
+                'first': f_name2.get(),
+                'last' : l_name2.get(),
+                'address': address2.get(),
+                'city': city2.get(),
+                'state' : state2.get(),
+                'age': age2.get(),
+                'oid': record_id
+              })
+
+    conn.commit()
+    conn.close()
+    id.delete(0, END)
+    root2.destroy()
+
 def update():
+    global root2
+    global f_name2
+    global l_name2
+    global address2
+    global city2
+    global state2
+    global age2
+    global record_id
+
     root2 = Toplevel()
     root2.title('Update Record')
     root2.geometry('300x300')
     root2.iconbitmap('D:\Python\Level 2\Codemy\Python And TKinter\PYTkinter\Images/plane.ico')
-
-
-    def save():
-        root2.destroy()
 
     f_name2 = Entry(root2, width=30)
     f_name2.grid(row=0, column=1, padx=20, pady=5)
@@ -67,7 +108,6 @@ def update():
         state2.insert(0, record[4])
         age2.insert(0, record[5])
 
-    id.delete(0, END)
     conn.commit()
     conn.close()
 
@@ -162,8 +202,8 @@ clear_butn = Button(root, text = "Clear", fg = 'red',command = clear)
 clear_butn.grid(row = 8, column = 0, columnspan = 2,padx=10, pady=5, ipadx=119)
 delete_butn = Button(root, text = "Delete Record", fg = 'brown',command = delete)
 delete_butn.grid(row = 11, column = 0, columnspan = 2,padx=10, pady=5, ipadx=95)
-update_butn = Button(root, text = "Update Record", fg = 'purple',command = update)
-update_butn.grid(row = 10, column = 0, columnspan = 2,padx=10, pady=5, ipadx=92)
+update_butn = Button(root, text = "Edit Record", fg = 'purple',command = update)
+update_butn.grid(row = 10, column = 0, columnspan = 2,padx=10, pady=5, ipadx=102)
 
 conn.commit()
 conn.close()
